@@ -475,4 +475,10 @@ params 和 query 传参的区别：
 
 ## cookies/session/token
 
+https://www.cnblogs.com/moyand/p/9047978.html
+
+https://segmentfault.com/a/1190000017831088
+
+https://www.cnblogs.com/pengc/p/8714475.html
+
 ## cookies/sessionStroage/localStroage
