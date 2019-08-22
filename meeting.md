@@ -455,9 +455,24 @@ Vuex 使用**单一状态树**,管理状态的仓库
 mutations必须是同步的, 我们都知道任何回调函数中进行的状态改变都是无法追踪的,无法实现捕捉状态devtools
 Action 提交的是 mutation，而不是直接变更状态,为了解决mutations只有同步的问题
 
+## 聊聊对vue的一些理解
+
+[聊聊对vue的一些理解](https://www.jianshu.com/p/0c0a4513d2a6)
+
+Vue是一套构建用户界面的渐进式框架,也可以理解为是一个视图模板引擎,强调的是状态到界面的映射。
+
+Vue.js（读音 /vjuː/, 类似于**view**）是一个构建数据驱动的 web 界面的库。Vue.js 的目标是通过尽可能简单的 API 实现**响应的数据绑定**和**组合的视图组件**。(数据驱动和组件化)
+
 
 
 ## 双向数据绑定
+
+vue的双向绑定是由**数据劫持结合发布者－订阅者模式实现的，**那么什么是数据劫持？vue是如何进行数据劫持的？说白了就是通过**Object.defineProperty()**来**劫持对象属性的** **setter**和**getter** 操作.
+
+那么首先要对数据进行**劫持监听**，所以我们首先要设置一个**监听器Observer**,用来监听所有的属性，当属性变化时，就需要通知**订阅者**Watcher**,看是否需要更新．因为属性可能是多个，所以会有多个订阅者，故我们需要一个**消息订阅器****Dep**来专门收集这些订阅者，并在监听器Observer和订阅者Watcher之间进行统一的管理．以为在节点元素上可能存在一些指令，所以我们还需要有一个**指令解析器**Compile**，对每个节点元素进行扫描和解析，将相关指令初始化成一个订阅者Watcher，并替换模板数据并绑定相应的函数，这时候当订阅者Watcher接受到相应属性的变化，就会执行相对应的更新函数，从而更新视图
+(Observer(监听器,劫持所有属性), watcher(订阅者)更新师徒,Dep(消息订阅器)收集订阅者,通知变化,,Compile(指令解析器)初始化视图,绑定更新函数)
+
+![1566446573756](media/1566446573756.png)
 
 ## 正则
 
@@ -482,3 +497,157 @@ https://segmentfault.com/a/1190000017831088
 https://www.cnblogs.com/pengc/p/8714475.html
 
 ## cookies/sessionStroage/localStroage
+
+## [document.write()和innerHTML的区别](https://www.cnblogs.com/lyd447113735/p/8856982.html)
+
+[document.write()/innerHTML](https://www.cnblogs.com/fly-xfa/p/6031075.html)
+
+页面有初始内容，点击页面中的按钮向页面中通过document.write()方法写入内容，会发现原先的初始内容消失了，整个页面只剩下了通过write()方法写入的内容。原因是整个页面进行了重绘
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+初始内容
+
+
+<button onclick="fun()" >按鈕</button>
+
+
+<script>
+    function fun() {
+        document.write("write内容");
+    }
+
+</script>
+
+</body>
+</html>
+```
+举例二：页面有初始内容，在初始内容后面给定一个节点，通过innerHTML向这个节点写内容，初始内容不消失，通过innerHTML新增加的内容准确的显示在节点位置
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+初始内容<a id="p"></a>
+
+
+<button onclick="fun()">按钮</button>
+
+
+<script>
+    function fun() {
+       document.getElementById("p").innerHTML="新增加的innerHTML内容";
+    }
+
+</script>
+
+</body>
+</html>
+```
+
+[iframe基本内涵](https://www.cnblogs.com/hq233/p/9849939.html)
+嵌套文档,
+广告
+
+## CSS中的继承
+
+[CSS中的继承](https://www.cnblogs.com/duhuo/p/8018756.html)
+
+font系列 size,style,family
+
+text 系列 align line-height color
+
+visibility, list-style, cursor
+## eval()
+
+![1566445284710](media/1566445284710.png)
+
+eval 好不好取决于怎么使用它，一般认为的缺点：
+1. 可读性非常差
+2. 不好再做优化和编译
+3. 会轻微增加性能消耗
+4. 不安全，XSS攻击
+5. 不好调试
+
+[JavaScript 为什么不推荐使用 eval？](https://www.zhihu.com/question/20591877)
+
+
+[eval到底有什么问题](https://www.jianshu.com/p/3b2d86f3aecb)
+
+[为什么eval要添加括号呢？](https://www.cnblogs.com/lovebing/p/8302093.html)
+
+```js
+console.log(eval("{}"); // undefined
+
+console.log(eval("({})");// object[Object]
+```
+原因：eval本身的问题。 由于json是以{}的方式来开始以及结束的，在JS中，它会被当成一个语句块来处理，所以必须强制性的将它转换成一种表达式。
+
+## [两种盒子模型](https://wanghan0.github.io/2017/03/31/css-box/#u4E24_u79CD_u76D2_u5B50_u6A21_u578B)
+
+其实盒模型有两种，分别是**ie盒子模型**（IE6以下版本浏览器)和**标准w3c盒子模型**，区别在于前者content的宽度和高度包括了border和padding。
+
+margin（外边界）虽不可见，但是它确实在文档中占据了空间，我们要区分两个概念即：盒子所占空间（计入margin ）和盒子实际的大小（不计入margin） 。
+
+ [实例区分两种盒模型](https://wanghan0.github.io/2017/03/31/css-box/#u5B9E_u4F8B_u533A_u5206_u4E24_u79CD_u76D2_u6A21_u578B)
+
+下面举个例子来区分两种盒模型：一个盒子的 margin 为 20px，border 为 2px，padding 为 10px，content 的宽为 200px、高为 50px。
+
+### [ie盒子模型](https://wanghan0.github.io/2017/03/31/css-box/#ie_u76D2_u5B50_u6A21_u578B)
+
+盒子所占空间：width=20ｘ2+200=240      　　          height=20ｘ2+50=90
+
+盒子实际大小：width=200         　　　　　　　   height=50
+
+### [标准w3c盒子模型](https://wanghan0.github.io/2017/03/31/css-box/#u6807_u51C6w3c_u76D2_u5B50_u6A21_u578B)
+
+盒子所占空间：width=20ｘ2+2ｘ2+10ｘ2+200=264  　  height=20ｘ2+２ｘ2+10ｘ2 +50=114
+
+盒子实际大小：width=200 +2ｘ2+10ｘ2 =224   　　　    height=50+2ｘ2+10ｘ2=74
+
+解释到这里，有的人可能会想起CSS3里面有个叫做box-sizing的属性，咦？两个盒模型不就是它不同取值下的效果吗？那我恭喜你，你说对了～
+
+ [box-sizing和两种盒模型不得不说的事](https://wanghan0.github.io/2017/03/31/css-box/#box-sizing_u548C_u4E24_u79CD_u76D2_u6A21_u578B_u4E0D_u5F97_u4E0D_u8BF4_u7684_u4E8B)
+
+box-sizing有三个取值：
+
+1、content-box:使元素遵循标准 w3c 盒子模型（默认值）。
+
+2、border-box:使元素遵循ie 盒子模型。
+
+3、 inherit： 规定应从父元素继承 box-sizing 属性的值。
+
+那么我可以用box-sizing的不同取值让大家直观地理解两个盒子的区别，也顺带理解这个属性，下面是需要用到的html代码，方便大家看得清楚，我给盒子外面添加一个宽高各500px的灰色背景。
+
+        <div class='bg'>
+
+            <div class='box'></div>
+​        </div>
+
+[box-sizing：content-box](https://wanghan0.github.io/2017/03/31/css-box/#box-sizing_uFF1Acontent-box)
+
+​        .box{
+
+​                background-color: #91D4DA;
+
+​                width: 300px;
+
+​                height: 300px;
+
+​                padding: 20px;
+
+​                border: 10px solid #5B5B5B;
+
+​                box-sizing: content-box;    /*默认值，可以不写*/
+
+​            }
