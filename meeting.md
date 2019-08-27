@@ -163,7 +163,57 @@ PrimaryStudent.prototype = new F();
 
 ### new操作符原理
 
+这篇比较好
+
+https://www.cnblogs.com/zhangchs/p/11067664.html
+
+最好这个
+
+https://www.jianshu.com/p/842fed8551c9
+
 ```js
+// 最佳
+function Student(name, age) {
+  this.name = name
+  this.age = age
+}
+function _new() {
+  var obj = new Object()
+  var Con = [].shift.call(arguments)
+  obj.__proto__ = Con.prototype
+  var ret = Con.apply(obj, arguments)
+  return typeof ret === 'object' ? ret : obj
+}
+
+let xiaoming = _new(Student,'xiaoming', 15)
+console.log(xiaoming);
+
+
+
+//new运算符的伪码实现 
+function _new(clazz, args){ 
+    //clone(clazz.prototype) 
+    var this = {}; 
+    this.__proto__ = clazz.prototype; 
+    var obj  = clazz.apply(this, args); 
+    var type = typeof obj; 
+    if(type == "object" && obj !== null || type == "function"){ 
+        return obj; 
+    }else{ 
+        return this; 
+    } 
+    /* 另一种写法
+    if(obj === null || type == "undefined" || type == "boolean" || type == "number" || type == "string"){
+        return this;
+    }else{
+        return obj;
+    }
+    */ 
+} 
+var a = new ClassA(1,2); 
+var a = _new(ClassA, [1,2]);  //伪码  　　<br><br>来源：https://wmingjian.iteye.com/blog/1881658
+
+
 //new运算符原理实现
 var new1 = function(fun){
     var newObj = Object.create(fun.prototype);
@@ -188,7 +238,7 @@ let arr = [2,1,5,6,3]
 function sortArr(arr) {
   for(let i=0; i<arr.length-1; i++) {
     let flag = true
-    for(let j=i; j< arr.length-1-i;j++) {
+    for(let j=0; j< arr.length-1-i;j++) {
       if(arr[j]>arr[j+1]) {
         let temp = arr[j]
         arr[j] = arr[j+1]
@@ -459,6 +509,8 @@ Action 提交的是 mutation，而不是直接变更状态,为了解决mutations
 
 [聊聊对vue的一些理解](https://www.jianshu.com/p/0c0a4513d2a6)
 
+https://www.jianshu.com/p/0c0a4513d2a6
+
 Vue是一套构建用户界面的渐进式框架,也可以理解为是一个视图模板引擎,强调的是状态到界面的映射。
 
 Vue.js（读音 /vjuː/, 类似于**view**）是一个构建数据驱动的 web 界面的库。Vue.js 的目标是通过尽可能简单的 API 实现**响应的数据绑定**和**组合的视图组件**。(数据驱动和组件化)
@@ -473,6 +525,36 @@ vue的双向绑定是由**数据劫持结合发布者－订阅者模式实现的
 (Observer(监听器,劫持所有属性), watcher(订阅者)更新师徒,Dep(消息订阅器)收集订阅者,通知变化,,Compile(指令解析器)初始化视图,绑定更新函数)
 
 ![1566446573756](media/1566446573756.png)
+
+**observable**
+
+```js
+Object.defineProperty(obj, key, value, {
+  get() {
+    return value
+  },
+  set(newValue) {
+    value = newValue
+  }
+})
+
+function observable(obj) {
+  if (!obj || typeof obj !== 'object') {
+    return;
+  }
+  let keys = Object.keys(obj)
+  keys.forEach(key => {
+    defineProperty(obj, key, obj[key])
+  })
+  return obj
+}
+let car = observable({
+  'brand': 'BMW',
+  'price': 3000
+})
+```
+
+
 
 ## 正则
 
@@ -490,13 +572,34 @@ params 和 query 传参的区别：
 
 ## cookies/session/token
 
+大小，生命，安全
+
+cookie是随HTTP事务一起被发送的，因此会浪费一部分发送cookie时使用的带宽
+
 https://www.cnblogs.com/moyand/p/9047978.html
 
-https://segmentfault.com/a/1190000017831088
+https://segmentfault.com/a/1190000017831088`token`
 
 https://www.cnblogs.com/pengc/p/8714475.html
 
+
+
+**http是一个无状态协议**
+
+什么是无状态呢？就是说这一次请求和上一次请求是没有任何关系的，互不认识的，没有关联的。这种无状态的的好处是快速。坏处是假如我们想要把`www.zhihu.com/login.html`和`www.zhihu.com/index.html`关联起来，必须使用某些手段和工具
+**token可以抵抗csrf，cookie+session不行**
+
+(跨站请求伪造:form 发起的 POST 请求并不受到浏览器同源策略的限制)
+
+**分布式情况下的session和token**
+
+
+
 ## cookies/sessionStroage/localStroage
+
+[sessionStroage](https://www.iteye.com/blog/adamed-1698740)
+
+不同浏览器无法共享localStorage或sessionStorage中的信息。相同浏览器的不同页面间可以共享相同的localStorage（页面属于相同域名和端口），但是不同页面或标签页间无法共享sessionStorage的信息。这里需要注意的是，页面及标签页仅指顶级窗口，如果一个标签页包含多个iframe标签且他们属于同源页面，那么他们之间是可以共享sessionStorage的
 
 ## [document.write()和innerHTML的区别](https://www.cnblogs.com/lyd447113735/p/8856982.html)
 
@@ -591,7 +694,7 @@ console.log(eval("{}"); // undefined
 
 console.log(eval("({})");// object[Object]
 ```
-原因：eval本身的问题。 由于json是以{}的方式来开始以及结束的，在JS中，它会被当成一个语句块来处理，所以必须强制性的将它转换成一种表达式。
+原因：eval本身的问题。 由于json是以{}的方式来开始以及结束的，在JS中，它会被当成一个**语句块**来处理，所以必须强制性的将它转换成一种表达式。
 
 ## [两种盒子模型](https://wanghan0.github.io/2017/03/31/css-box/#u4E24_u79CD_u76D2_u5B50_u6A21_u578B)
 
@@ -651,3 +754,169 @@ box-sizing有三个取值：
 ​                box-sizing: content-box;    /*默认值，可以不写*/
 
 ​            }
+
+## 浮动和BFC
+
+原理:
+
+浮动元素会脱离文档流并向左/向右浮动，直到碰到父元素或者另一个浮动元素。
+
+被浮动的元素可以内联排列。
+
+浮动元素脱离了文档流，并不占据文档流的位置，自然父元素也就不能被撑开，所以没了高度。
+
+清楚浮动
+
+1.最后加空div,包含clear:both;
+
+2.伪类
+
+```css
+// clearfix方案，不支持IE6/7
+.clearfix:after {
+    display: table;
+    content: " ";
+    clear: both;
+}
+
+// 引入了zoom以支持IE6/7
+.clearfix:after {
+    display: table;
+    content: " ";
+    clear: both;
+}
+.clearfix{
+    *zoom: 1;
+}
+
+// 最佳实践方案
+// 加入:before以解决现代浏览器上边距折叠的问题
+.clearfix:before,
+.clearfix:after {
+    display: table;
+    content: " ";
+}
+.clearfix:after {
+    clear: both;
+}
+.clearfix{
+    *zoom: 1;
+}
+或者
+.clearfix::after {
+content:'',
+display:block;
+height:0;
+visibility:hidden;
+chear:both;
+}
+```
+
+3.bfc
+
+overflow:hidden;
+
+## 浏览器兼容性
+
+[兼容1](https://www.cnblogs.com/iceflorence/p/6646344.html)
+
+## JS兼容性
+
+[js兼容1](https://blog.csdn.net/u011263845/article/details/45154777)
+
+[js兼容2](https://blog.csdn.net/wendy0818/article/details/53575132)
+
+```js
+e.preventDefault()阻止事件默认行为。
+
+return false等效于同时调用e.preventDefault()和e.stopPropagation()
+
+if (ret===false){
+event.preventDefault();
+event.stopPropagation();
+}
+
+
+```
+
+## git
+[git fetch & pull详解](https://www.cnblogs.com/runnerjack/p/9342362.html)
+`git fetch`是将远程主机的最新内容拉到本地，用户在检查了以后决定是否合并到工作本机分支中。
+
+而`git pull` 则是将远程主机的最新内容拉下来后直接合并，即：`git pull = git fetch + git merge`，这样可能会产生冲突，需要手动解决。
+
+
+
+## 其他
+
+https://www.cnblogs.com/xjnotxj/p/7452698.html
+
+## 你找工作最看重什么
+
+**看重企业氛围**
+
+作为年轻人，我的工作经历欠缺，工作经验不足，所以相比较薪酬待遇，我更看重企业的文化。我希望在工作中，我能够发挥自我的长处，应对工作中的挑战，来提高自我的职业水平，与公司共同发展进步。
+
+**看重工作中的挑战性**
+
+我还年轻，过不惯那种喝茶看报的生活。我希望找一份有挑战性的工作，趁着年轻，多闯一闯，通过实践不断提升个人职业能力。
+
+**看重个人兴趣**
+
+薪水、工作地点“都好商量”，唯有兴趣不能妥协。从上学到现在，我一直对XX方面特别感兴趣，也为此学习了一些专业知识，积累了相关的经验。这些积累恰巧能用到贵公司招聘的XX岗位上。我自认为能胜任此份工作，也能在兴趣的前提下更好的调动工作积极性。
+
+## 你还有什么问题想问我
+
+1.福利待遇有个每周固定体育活动，我想知道那个体育活动是什么活动 （我自己非常喜欢打乒乓球，还有非常喜欢骑单车，曾经骑共享单车去过江门和汕尾 2天 和4天）
+
+
+
+2.你们公司的技术栈
+
+
+
+3.您希望我在短期内解决哪些问题？
+
+
+
+3.如果我有幸来到这里工作，您对我的期望是什么？
+
+
+
+
+
+非常感谢您给我这个面试的机会。
+
+
+
+## 问你找工作的情况,是否有收到其他公司offer
+
+有一家面试了，拿到offer，面试过程跟他们的技术聊了会，但是觉得他们公司太传统，没有什么提升。
+
+公司不会考虑用其他框架或者新的技术开发。
+
+我在网上查了公司的资料，我很希望能加入到公司。
+
+## 我的优势
+
+第一个，我觉得我懂得坚持，我非常喜欢骑单车，曾经骑共享单车去过江门和汕尾 2天 和4天，虽然那个过程很累，但是我很享受那个骑车过程。我自认为我能把这份坚持带到工作和学习上，因为我是真的很喜欢前端。
+
+第二个，我喜欢折腾。无论是数码产品还是一些新的网络技术，我一直都很喜欢折腾它，这个虽然不算什么优点，因为折腾的结果有好有坏，但是我还是很喜欢折腾这些新的东西。
+
+第三个，
+
+## 自我介绍
+
+首先非常感谢面试官能给我这次面试的机会。我叫郑俊健，来自广东江门，在广州大学松田学院读书，学历是在读本科，专业是软件工程。
+
+在校学习课程，
+
+自学 自学网站，
+
+学习方法，
+
+兴趣爱好。
+
+https://wenku.baidu.com/view/de57e0bd2dc58bd63186bceb19e8b8f67c1cefe6.html
+
+![1566923172929](media/1566923172929.png)
