@@ -315,7 +315,11 @@ ajax({
 
 [闭包是什么](https://bbs.csdn.net/topics/392430917?page=1)
 
+https://www.cnblogs.com/Frank-C/p/4964999.html
+
 ### 闭包是什么?
+
+
 
 在函数里面return 一个函数;
 
@@ -326,6 +330,26 @@ ajax({
 案例
 
 点赞
+
+数据隐藏
+
+在JAVA中，我们知道他有一个叫数据隐藏的特性：  那么，JavaScript中的闭包，或许为我们敞开了大门:
+
+```js
+var db = (function() {
+  var data = {}
+  return function(key, val) {
+    if (val === undefined) { return data[key] }
+    else { return data[key] = val }
+  }
+})()
+
+let a = db('x',1)
+console.log(db('x'));
+
+```
+
+
 
 [防抖函数 ](https://blog.csdn.net/l598465252/article/details/85797497)
 
@@ -839,7 +863,33 @@ event.stopPropagation();
 
 ```
 
+## 事件循环
+
+《你不知道的JavaScript》中卷第155页说的是将setTimeout的回调函数插入到当前事件循环队列的结尾处
+
+https://blog.csdn.net/wxl1555/article/details/80054538
+
+```js
+setTimeout(function(){console.log(1)},0);
+new Promise(function(resolve){
+    console.log(2)
+    for( var i=0 ; i<10000 ; i++ ){
+        i==9999 && resolve()
+    }
+    console.log(3)
+}).then(function(){
+    console.log(4)
+});
+console.log(5);
+// 这的问题是，为什么答案是 2 3 5 4 1
+// 而不是 2 3 5 1 4
+
+```
+
+
+
 ## git
+
 [git fetch & pull详解](https://www.cnblogs.com/runnerjack/p/9342362.html)
 `git fetch`是将远程主机的最新内容拉到本地，用户在检查了以后决定是否合并到工作本机分支中。
 
