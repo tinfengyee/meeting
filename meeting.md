@@ -535,9 +535,12 @@ Action 提交的是 mutation，而不是直接变更状态,为了解决mutations
 
 https://www.jianshu.com/p/0c0a4513d2a6
 
-Vue是一套构建用户界面的渐进式框架,也可以理解为是一个视图模板引擎,强调的是状态到界面的映射。
+官方Vue是一套构建用户界面的渐进式框架,也可以理解为是一个视图模板引擎,强调的是状态到界面的映射。
 
 Vue.js（读音 /vjuː/, 类似于**view**）是一个构建数据驱动的 web 界面的库。Vue.js 的目标是通过尽可能简单的 API 实现**响应的数据绑定**和**组合的视图组件**。(数据驱动和组件化)
+
+那么,怎样理解什么是渐进式框架?在这之前,我们首先要理解什么是框架.在最初的前端开发中,为了完成某个功能,我们需要通过js在HTML页面中获得dom节点,随后获得dom节点中的文本内容或者在dom节点上添加事件,进行一系列的程序操作,但是,如果任务量很大的情况下,代码会随着业务的增加而变得臃肿和混乱,在现实的开发中,负责的逻辑和巨大的开发量,是原生js无法完成的.
+
 
 
 
@@ -682,9 +685,42 @@ https://www.cnblogs.com/pengc/p/8714475.html
 </html>
 ```
 
-[iframe基本内涵](https://www.cnblogs.com/hq233/p/9849939.html)
+## [iframe基本内涵](https://www.cnblogs.com/hq233/p/9849939.html)
 嵌套文档,
 广告
+
+## 数组去重
+
+es5常用
+
+```js
+function unique(arr){            
+        for(var i=0; i<arr.length; i++){
+            for(var j=i+1; j<arr.length; j++){
+                if(arr[i]==arr[j]){         //第一个等同于第二个，splice方法删除第二个
+                    arr.splice(j,1);
+                    j--;
+                }
+            }
+        }
+return arr;
+}
+```
+
+es6 合并去重
+
+```js
+function combine() {
+  let arr = [].concat.apply([], arguments)
+  return Array.from(new Set(arr))
+}
+let a = [1,2,3]
+let a2 = [1,4,5]
+
+console.log(combine(a, a2));
+```
+
+
 
 ## CSS中的继承
 
@@ -795,6 +831,8 @@ box-sizing有三个取值：
 
 2.伪类
 
+3.bfc (overflow:hidden;原理计算bfc高度)
+
 ```css
 // clearfix方案，不支持IE6/7
 .clearfix:after {
@@ -836,13 +874,62 @@ chear:both;
 }
 ```
 
-3.bfc
+**3.bfc**
+
+https://www.jianshu.com/p/d94c6b679739
+
+不要试图解释，用例子
+
+**BFC就是页面上的一个隔离的独立容器**
+
+1.BFC清楚浮动， 原理**计算BFC的高度时，自然也会检测浮动或者定位的盒子高度。**
+
+2.解决外边距合并问题，原理 **盒子垂直方向的距离由margin决定。属于同一个BFC的两个相邻盒子的margin会发生重叠**
+
+一个加overflow:hidden产生新的bfc
+
+3.制作右侧自适应的盒子问题 原理 **普通流体元素BFC后，为了和浮动元素不产生任何交集，顺着浮动边缘形成自己的封闭上下文**
+
+
 
 overflow:hidden;
+
+## 响应式和自适应(bootstrap和rem)
+
+响应式布局：（网格布局，媒体查询）响应式布局，称为Responsive Web Design。它是将已有的开发技巧（弹性网格布局、弹性图片、媒体和媒体查询）整合起来，针对任意设备对网页内容进行“完美”布局的一种显示机制。简言之，是一个网站能够兼容多个终端（手机、Pad、电脑）的布局方法，而不需要为每个终端书写一套特定版本的代码。
+
+
+
+
+
+自适应布局：（通过检测视口分辨率，通过js或者css控制改变HTML根元素font-size，借助rem，百分比）移动端的发展带来了自适应布局。通过JS及CSS的控制，借助rem、百分比等相对度量单位，让代码在多种分辨率的移动端正常呈现。自适应布局，是当前移动端实现网页布局的最常用的布局方法，需要综合使用多种知识
 
 ## 浏览器兼容性
 
 [兼容1](https://www.cnblogs.com/iceflorence/p/6646344.html)
+
+### CSS hack
+
+https://www.cnblogs.com/mumble/p/4576489.html
+
+https://blog.csdn.net/qq_31635733/article/details/81660897
+
+同厂商的流览器或某浏览器的不同版本（如IE6-IE11,Firefox/Safari/Opera/Chrome等），对CSS的支持、解析不一样，呈现出不一致的页面展现效果，我们把这个针对不同的浏览器/不同版本写相应的CSS code的过程，叫做CSS hack!
+
+浮动 clearfix { *zoom:1; }
+
+### CSS hack方式一：条件注释法
+
+```css
+<!-- [if IE 6]>
+    <![endif] -->
+```
+
+### CSS hack方式二：类内属性前缀法
+
+ie6 : `*` `_`
+
+ie7 :`*`
 
 ## JS兼容性
 
