@@ -888,8 +888,17 @@ https://www.cnblogs.com/pengc/p/8714475.html
 ```
 
 ## [iframe基本内涵](https://www.cnblogs.com/hq233/p/9849939.html)
-嵌套文档,
-广告
+https://www.zhihu.com/question/20653055
+
+应用:
+
+1.沙箱隔离,
+
+2.引用第三方内容，不担心影响整体页面加载(广告),
+
+4.很多邮箱网站,或者文章网站,w3c测试页面,**正方教务管理系统**都在iframe
+
+3.用来实现长连接,在websocket不可用的时候
 
 ## 数组去重
 
@@ -1189,6 +1198,16 @@ console.log(5);
 // 这的问题是，为什么答案是 2 3 5 4 1
 // 而不是 2 3 5 1 4
 
+```
+
+```js
+var let 块级作用域
+for (let i = 0; i < 5; i++) {     //let 代替 var
+    setTimeout(function (){
+        console.log(i);  
+     },1000);  
+}
+https://www.cnblogs.com/xjnotxj/p/7452698.html
 ```
 
 
