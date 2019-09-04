@@ -1,4 +1,24 @@
+## 堆栈和数据类型
+
+（1）值类型（基本类型）：字符串（string）、数值（number）、布尔值（boolean）、undefined、null  （这5种基本数据类型是按值访问的，因为可以操作保存在变量中的实际的值）(ECMAScript 2016新增了一种基本数据类型：symbol http://es6.ruanyifeng.com/#docs/symbol )
+
+（2）引用类型：对象（Object）、数组（Array）、函数（Function）
+
+基本类型的数据是存放在**栈**内存中的，而引用类型的数据是存放在堆内存中的
+
+
+
+基本类型的复制就是在栈内存中开辟出了一个新的存储区域用来存储新的变量，这个变量有它自己的值，只不过和前面的值一样，所以如果其中一个的值改变，则不会影响到另一个
+
+https://www.cnblogs.com/leiting/p/8081413.html
+
+https://www.cnblogs.com/yikezhuixun/p/6126136.html
+
+https://www.cnblogs.com/ljuyi/p/6100071.html
+
 ## 原型
+
+https://juejin.im/post/58f94c9bb123db411953691b
 
 如果想要使用一些属性和方法,并且属性的值在每个对象中都是一样的,方法在每个对象中的操作也都是一样,那么,为了**共享数据,节省内存空间**,是可以把属性和方法通过原型的方式进行赋值
 
@@ -11,6 +31,8 @@
 当试图得到一个对象f的某个属性时，如果这个对象本身没有这个属性，那么会去它的_proto_（即它的构造函数的prototype）obj._proto_中去寻找.....
 
 )
+
+**new ()**
 
 用`new Student()`创建的对象还从原型上获得了一个`constructor`属性，它指向函数`Student`本身：
 
@@ -69,6 +91,17 @@ xiaoming instanceof Student; // true
 ```
 
 ## 原型继承 //组合继承 // class继承
+
+```
+function PrimaryStudent(props) {
+    // 调用Student构造函数，绑定this变量:
+    Student.call(this, props);
+    this.grade = props.grade || 1;
+}
+但是，调用了Student构造函数不等于继承了Student，不能继承父类原型上的方法
+```
+
+
 
 在传统的基于Class的语言如Java、C++中，继承的本质是扩展一个已有的Class，并生成新的Subclass
 在js中,我们无法直接扩展一个Class
@@ -507,9 +540,63 @@ CSS3
 
 ## MVC和MVVM
 
+https://blog.csdn.net/qq_37994553/article/details/78631949 `推荐`
+
+https://www.cnblogs.com/chauncynong/p/9305360.html
+
+```js
+MVC 
+
+优点： 分离类的UI与业务职责，增加可测试性与可扩展性，降低了程序的耦合度，提高了代码的重用性。（耦合：紧密配合与相互影响）
+
+缺点：View既依赖于Controller又依赖于Model，解耦程度不足。
+
+在Android中，Bean类为数据原型，xml布局文件显示视图，Activity类做逻辑跳转。 
+但实际上Activity即显示视图，又控制逻辑。
+
+MVP
+Presenter将View与Model分离，使得View和Model之间不存在耦合，同时也将业务逻辑从View中抽离。所有的业务逻辑由Presenter主持者来控制。
+优点：模块职责划分明显,增加可测试性与可扩展性，隐藏数据,降低了程序的耦合度，提高了代码的重用性与灵活性。
+
+缺点：视图的渲染在Presenter中，所以视图和Presenter的交互会过于频繁。如果Presenter过多地渲染了视图，往往会使得它与特定的视图的联系过于紧密。
+一旦视图需要变更，那么Presenter也需要变更了
+
+MVVM
+(原因,业务逻辑复杂,还要大量手动操作DOM,MVVM因此开发者只需关注业务逻辑)
+MVVM模式：采用双向绑定（data-binding）：View的变动，自动反映在 ViewModel，反之亦然。 
+ViewModel主要包括界面逻辑和模型数据封装，Behavior/Command事件响应处理，绑定属性定义和集合。
+
+优点：便于代码移植，兼容MVC，方便测试，降低了程序的耦合度，提高了代码的重用性。(低耦合,可复用,独立开发,可测试)
+(
+低耦合。 视图（View）可以独立于Model变化和修改，一个ViewModel可以绑定到不同的"View"上，当View变化的时候Model可以不变，当Model变化的时候View也可以不变。
+可重用性。 你可以把一些视图逻辑放在一个ViewModel里面，让很多view重用这段视图逻辑。
+独立开发。 开发人员可以专注于业务逻辑和数据的开发（ViewModel），设计人员可以专注于页面设计。
+可测试。 界面素来是比较难于测试的，而现在测试可以针对ViewModel来写易用灵活高效
+)
+缺点：类会增多，ViewModel会越加庞大，调用的复杂度增加。
+
+一、对于MVVM的理解？
+MVVM 是 Model-View-ViewModel 的缩写。
+Model代表数据模型，也可以在Model中定义数据修改和操作的业务逻辑。
+View 代表UI 组件，它负责将数据模型转化成UI 展现出来。
+ViewModel 监听模型数据的改变和控制视图行为、处理用户交互，简单理解就是一个同步View 和 Model的对象，连接Model和View。
+在MVVM架构下，View 和 Model 之间并没有直接的联系，而是通过ViewModel进行交互，Model 和 ViewModel 之间的交互是双向的， 因此View 数据的变化会同步到Model中，而Model 数据的变化也会立即反应到View 上。
+ViewModel 通过双向数据绑定把 View 层和 Model 层连接了起来，而View 和 Model 之间的同步工作完全是自动的，无需人为干涉，因此开发者只需关注业务逻辑，不需要手动操作DOM, 不需要关注数据状态的同步问题，复杂的数据状态维护完全由 MVVM 来统一管理。
+```
+
+
+
+![1567520995606](media/1567520995606.png)
+
+![1567521029443](media/1567521029443.png)
+
+MVC 松散耦合、逻辑复用
+
+现在页面数据复杂, 解决视图解析的问题.
+
 MVC: Controller被设计出来并不是处理数据解析的。1、管理自己的生命周期；2、处理Controller之间的跳转；3、实现Controller容器。这里面根本没有“数据解析”这一项
 
-MVVM: 想象Controller是一个Boss，数据是一堆文件（Model），如果现在是MVC，那么数据解析（比如整理文件）需要由Boss亲自完成，然而实际上Boss需要的仅仅是整理好的文件而不是那一堆乱七八糟的整理前的文件。所以Boss招聘了一个秘书，现在Boss就不再需要管理原始数据（整理之前的文件）了，他只需要去找秘书：你帮我把文件整理好后给我。
+MVVM: 在MVVM中，Controller不再像MVC那样直接持有Model了。想象Controller是一个Boss，数据是一堆文件（Model），如果现在是MVC，那么数据解析（比如整理文件）需要由Boss亲自完成，然而实际上Boss需要的仅仅是整理好的文件而不是那一堆乱七八糟的整理前的文件。所以Boss招聘了一个秘书，现在Boss就不再需要管理原始数据（整理之前的文件）了，他只需要去找秘书：你帮我把文件整理好后给我, Controller的存在感被完全的降低了。
 作者：星球小霸王链接：https://www.jianshu.com/p/b0aab1ffad93来源：简书简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。
 
 ## [Vue中的身份验证](https://www.cnblogs.com/jtjds/p/9634840.html)
@@ -522,7 +609,41 @@ MVVM: 想象Controller是一个Boss，数据是一堆文件（Model），如果�
 
 可访问路由权限(动态加载菜单和路由): 在页面加载的时候，就进行权限判断(路由meta属性)路由元信息增加角色,没有就都允许)，有的话通过router.addRoutes方法挂载在可访问路由表上,无权限的操作不进行显示
 
+## Vue经常被问到的
+
+https://segmentfault.com/a/11900000163445994
+
+## 对VUE的理解
+
+### vue渐进式框架的理解
+
+http://www.bslxx.com/a/vue/2017/1205/1490.html
+
+## VUE生命周期
+
+ 什么是生命周期：从Vue实例创建、运行、到销毁期间，总是伴随着各种各样的事件，这些事件，统称为生命周期！
+
++ beforeCreate：实例刚在内存中被创建出来，此时，还没有初始化好 data 和 methods 属性
+      + created：实例已经在内存中创建OK，此时 data 和 methods 已经创建OK，此时还没有开始 编译模板
+      + beforeMount：此时已经完成了模板的编译，但是还没有挂载到页面中
+      + mounted：此时，已经将编译好的模板，挂载到了页面指定的容器中显示
+ - 运行期间的生命周期函数：
+     + beforeUpdate：状态更新之前执行此函数， 此时 data 中的状态值是最新的，但是界面上显示的 数据还是旧的，因为此时还没有开始重新渲染DOM节点
+     + updated：实例更新完毕之后调用此函数，此时 data 中的状态值 和 界面上显示的数据，都已经完成了更新，界面已经被重新渲染好了！
+ - 销毁期间的生命周期函数：
+     + beforeDestroy：实例销毁之前调用。在这一步，实例仍然完全可用。
+     + destroyed：Vue 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁。 
+————————————————
+版权声明：本文为CSDN博主「mqingo」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/mqingo/article/details/86031260
+
+如果考虑**keep-alive**
+
+还有**activated、deactivated**
+
 ## VUEX
+
+吸收Redux的经验, 状态管理
 
 Vuex 使用**单一状态树**,管理状态的仓库
 
@@ -530,6 +651,8 @@ mutations必须是同步的, 我们都知道任何回调函数中进行的状态
 Action 提交的是 mutation，而不是直接变更状态,为了解决mutations只有同步的问题
 
 ## 聊聊对vue的一些理解
+
+
 
 [聊聊对vue的一些理解](https://www.jianshu.com/p/0c0a4513d2a6)
 
@@ -551,37 +674,116 @@ vue的双向绑定是由**数据劫持结合发布者－订阅者模式实现的
 那么首先要对数据进行**劫持监听**，所以我们首先要设置一个**监听器Observer**,用来监听所有的属性，当属性变化时，就需要通知**订阅者**Watcher**,看是否需要更新．因为属性可能是多个，所以会有多个订阅者，故我们需要一个**消息订阅器****Dep**来专门收集这些订阅者，并在监听器Observer和订阅者Watcher之间进行统一的管理．以为在节点元素上可能存在一些指令，所以我们还需要有一个**指令解析器**Compile**，对每个节点元素进行扫描和解析，将相关指令初始化成一个订阅者Watcher，并替换模板数据并绑定相应的函数，这时候当订阅者Watcher接受到相应属性的变化，就会执行相对应的更新函数，从而更新视图
 (Observer(监听器,劫持所有属性), watcher(订阅者)更新师徒,Dep(消息订阅器)收集订阅者,通知变化,,Compile(指令解析器)初始化视图,绑定更新函数)
 
+(
+
+**watcher(订阅者)**
+
+1. 把 Watcher 添加到 Dep 容器中，这里我们用到了 监听器的 get 函数
+2. 接收到通知，执行更新函数。
+
+**Compile 解析器**
+
+Compile 的主要作用一个是用来解析指令初始化模板，一个是用来添加添加订阅者，绑定更新函数。
+
+因为在解析 DOM 节点的过程中我们会频繁的操作 DOM， 所以我们利用文档片段（DocumentFragment）来帮助我们去解析 DOM 优化性能。)
+
 ![1566446573756](media/1566446573756.png)
 
 **observable**
 
 ```js
-Object.defineProperty(obj, key, value, {
-  get() {
-    return value
-  },
-  set(newValue) {
-    value = newValue
-  }
-})
-
-function observable(obj) {
-  if (!obj || typeof obj !== 'object') {
-    return;
-  }
-  let keys = Object.keys(obj)
-  keys.forEach(key => {
-    defineProperty(obj, key, obj[key])
-  })
-  return obj
-}
+/**
+     * 把一个对象的每一项都转化成可观测对象
+     * @param { Object } obj 对象
+     */
+    function observable (obj) {
+        if (!obj || typeof obj !== 'object') {
+            return;
+        }
+        let keys = Object.keys(obj);
+        keys.forEach((key) =>{
+            defineReactive(obj,key,obj[key])
+        })
+        return obj;
+    }
+    /**
+     * 使一个对象转化成可观测对象
+     * @param { Object } obj 对象
+     * @param { String } key 对象的key
+     * @param { Any } val 对象的某个key的值
+     */
+    function defineReactive (obj,key,val) {
+        Object.defineProperty(obj, key, {
+            get(){
+                console.log(`${key}属性被读取了`);
+                return val;
+            },
+            set(newVal){
+                console.log(`${key}属性被修改了`);
+                val = newVal;
+            }
+        })
+    }
 let car = observable({
   'brand': 'BMW',
   'price': 3000
 })
 ```
 
+## vue 组件通信
 
+一共4种
+
+1. 父子 props / emit
+
+2. 兄弟 eventBus 构建一个vue实例
+
+​    事件总线 通过on 和emit传递
+
+3. 所有 vuex
+
+4. provide / inject 祖先组件向所有子孙后代注入依赖(2.2新增)
+
+   
+## Vue-router 中hash模式和history模式的区别
+https://www.jb51.net/article/144341.htm
+
+**hash模式和history模式的不同**
+
+对于vue这类渐进式前端开发框架，为了构建 SPA（单页面应用），需要引入前端路由系统，这也就是 Vue-Router 存在的意义。前端路由的核心，就在于 —— 改变视图的同时不会向后端发出请求。
+
+**为了达到这一目的，浏览器当前提供了以下两种支持：**
+
+- hash —— 即地址栏 URL 中的 # 符号（此 hash 不是密码学里的散列运算）。比如这个 URL：http://www.abc.com/#/hello，hash 的值为 #/hello。它的特点在于：hash 虽然出现在 URL 中，但不会被包括在 HTTP 请求中，对后端完全没有影响，因此改变 hash 不会重新加载页面。
+- history —— 利用了 HTML5 History Interface 中新增的 pushState() 和 replaceState() 方法。（需要特定浏览器支持）这两个方法应用于浏览器的历史记录栈，在当前已有的 back、forward、go 的基础之上，它们提供了对历史记录进行修改的功能。只是当它们执行修改时，虽然改变了当前的 URL，但浏览器不会立即向后端发送请求。
+- 因此可以说，hash 模式和 history 模式都属于浏览器自身的特性，Vue-Router 只是利用了这两个特性（通过调用浏览器提供的接口）来实现前端路由.
+
+**使用场景**
+
+一般场景下，hash 和 history 都可以，除非你更在意颜值，# 符号夹杂在 URL 里看起来确实有些不太美丽。
+
+如果不想要很丑的 hash，我们可以用路由的 history 模式，这种模式充分利用 history.pushState API 来完成URL 跳转而无须重新加载页面。
+
+另外，根据 Mozilla Develop Network 的介绍，调用 history.pushState() 相比于直接修改 hash，存在以下优势:
+
+- pushState() 设置的新 URL 可以是与当前 URL 同源的任意 URL；而 hash 只可修改 # 后面的部分，因此只能设置与当前 URL 同文档的 URL；
+- pushState() 设置的新 URL 可以与当前 URL 一模一样，这样也会把记录添加到栈中；而 hash 设置的新值必须与原来不一样才会触发动作将记录添加到栈中；
+- pushState() 通过 stateObject 参数可以添加任意类型的数据到记录中；而 hash 只可添加短字符串；
+- pushState() 可额外设置 title 属性供后续使用。
+
+当然啦，history 也不是样样都好。SPA 虽然在浏览器里游刃有余，但真要通过 URL 向后端发起 HTTP 请求时，两者的差异就来了。尤其在用户手动输入 URL 后回车，或者刷新（重启）浏览器的时候。
+
+个人在接入微信的一个活动开发过程中 开始使用的hash模式，但是后面后端无法获取到我#后面的url参数，于是就把参数写在#前面，但是讨论后还是决定去掉这个巨丑的#
+
+于是乎改用history模式，但是开始跑流程的时候是没问题，但是后来发现跳转后刷新或者回跳，会报一个404的错误，找不到指定的路由,最后后端去指向正确的路由 加了/hd/xxx 去匹配是否有这个/hd/{:path} 才得以解决
+
+**总结**
+
+1 hash 模式下，仅 hash 符号之前的内容会被包含在请求中，如 http://www.abc.com，因此对于后端来说，即使没有做到对路由的全覆盖，也不会返回 404 错误。
+
+2 history 模式下，前端的 URL 必须和实际向后端发起请求的 URL 一致，如 http://www.abc.com/book/id。如果后端缺少对 /book/id 的路由处理，将返回 404 错误。Vue-Router 官网里如此描述：“不过这种模式要玩好，还需要后台配置支持……所以呢，你要在服务端增加一个覆盖所有情况的候选资源：如果 URL 匹配不到任何静态资源，则应该返回同一个 index.html 页面，这个页面就是你 app 依赖的页面。”
+
+3 结合自身例子，对于一般的 Vue + Vue-Router + Webpack + XXX 形式的 Web 开发场景，用 history 模式即可，只需在后端（Apache 或 Nginx）进行简单的路由配置，同时搭配前端路由的 404 页面支持。
 
 ## 正则
 
@@ -720,7 +922,11 @@ let a2 = [1,4,5]
 console.log(combine(a, a2));
 ```
 
+## null和undefined
 
+null 表示字段存在,但该值为空
+
+系统级错误
 
 ## CSS中的继承
 
@@ -822,6 +1028,18 @@ box-sizing有三个取值：
 浮动元素会脱离文档流并向左/向右浮动，直到碰到父元素或者另一个浮动元素。
 
 被浮动的元素可以内联排列。
+
+一个 HTML 盒（Box）满足以下任意一条，会创建块格式化上下文：
+
+1、  float属性不为none
+
+2、  position为absolute或fixed
+
+3、  overflow的值不为visible
+
+4、  display的值为table-cell，table-caption，inline-block中的任何一个。
+
+https://www.cnblogs.com/giggle/p/5236982.html
 
 浮动元素脱离了文档流，并不占据文档流的位置，自然父元素也就不能被撑开，所以没了高度。
 
@@ -988,6 +1206,24 @@ console.log(5);
 
 https://www.cnblogs.com/xjnotxj/p/7452698.html
 
+## 为什么前后端分离
+
+https://www.cnblogs.com/regnol/p/10572525.html
+
+
+
+术业有专攻: 前端只需要关注页面的样式与动态数据的解析&渲染，而后端专注于具体业务逻辑。
+
+1. 前端大量的组件代码得以复用，组件化，提升开发效率，抽出来！
+2. 提升开发效率，因为可以前后端并行开发，而不是像以前的强依赖。
+3. 增加代码的维护性&易读性（前后端耦在一起的代码读起来相当费劲）
+4. 也许你也需要有微信相关的轻应用，那样你的接口完全可以共用。
+5. 发现bug，可以快速定位是谁的问题
+
+拓展
+
+![1567430311285](media/1567430311285.png)
+
 ## 你找工作最看重什么
 
 **看重企业氛围**
@@ -1041,6 +1277,14 @@ https://www.cnblogs.com/xjnotxj/p/7452698.html
 第二个，我喜欢折腾。无论是数码产品还是一些新的网络技术，我一直都很喜欢折腾它，这个虽然不算什么优点，因为折腾的结果有好有坏，但是我还是很喜欢折腾这些新的东西。
 
 第三个，
+
+## 三五年
+
+短期 继续打磨技术和学习新技术
+
+中期 技术上可以独当一面
+
+后期 拿破仑说过,不想当将军的士兵不是好士兵
 
 ## 自我介绍
 

@@ -142,6 +142,18 @@ Content-Type:text/html <br>
 
 [常见状态码](https://blog.csdn.net/suntao19951010/article/details/82387247)
 
+https://blog.csdn.net/suntao19951010/article/details/82387247
+
+https://blog.csdn.net/xianjie0318/article/details/76541407
+
+200 OK               //客户端请求成功
+400 Bad Request      //客户端请求有语法错误，不能被服务器所理解
+401 Unauthorized     //请求未经授权
+403 Forbidden        //服务器受到请求，但拒绝提供服务
+404 Not Found        //请求资源不存在，eg：输入了错误的URL
+500 Internal Server Error  //服务器发生不可预期的错误
+503 Server Unavailable     //服务器当前不能处理客户端的请求，一段时间后可能恢复正常
+
 | 状态码 | 类别 | 描述 |
 | -- | -- | -- |
 | 1xx | Informational（信息状态码） | 接受请求正在处理 |

@@ -135,6 +135,10 @@ document.querySelectorAll('li').forEach((e) => {
 ## 事件循环
 事件循环是一个单线程循环，用于监视调用堆栈并检查是否有工作即将在任务队列中完成。如果调用堆栈为空并且任务队列中有回调函数，则将回调函数出队并推送到调用堆栈中执行。
 
+### 堆栈
+
+https://blog.csdn.net/zhangmeng1020/article/details/62887458
+
 #### [回到顶部](#JavaScript)
 
 ## 事件模型

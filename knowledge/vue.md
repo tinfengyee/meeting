@@ -74,6 +74,8 @@ mvvm的优点即是vue的优点，在这里再总结一下：<br>
 数据和视频之间的同步工作完全是自动的，无需人为干涉，所以开发者只需关注业务逻辑，不需要手动操作DOM, 不需要关注数据状态的同步问题，
 复杂的数据状态维护完全由 MVVM 来统一管理，节省了很多精力。
 
+还有灵活性,渐进式框架
+
 #### [回到顶部](#vue)
 
 ## 对于生命周期的理解
@@ -99,6 +101,7 @@ Vue中的生命周期也是一样，对应了Vue实例从创建到结束之间�
 * 父组件通过prop向子组件传值
 * 子组件通过事件向父组件传值
 * 子组件与子组件之间不能直接传值，需要通过父组件来做间接传值，在这种情况下推荐使用vuex
+* eventBus
 
 具体例子请看[官方文档](https://cn.vuejs.org/v2/guide/components.html#%E9%80%9A%E8%BF%87-Prop-%E5%90%91%E5%AD%90%E7%BB%84%E4%BB%B6%E4%BC%A0%E9%80%92%E6%95%B0%E6%8D%AE)
 
@@ -284,4 +287,5 @@ https://cn.vuejs.org/v2/guide/conditional.html#v-if-vs-v-show
 vue-loader 是解析 .vue 文件的一个加载器，将 template/js/style 转换成 js 模块。
 
 用途：js 可以写 es6、style 样式可以 scss 或 less；template 可以加 jade 等。
+
 #### [回到顶部](#vue)
